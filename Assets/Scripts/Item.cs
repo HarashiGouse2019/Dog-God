@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Item : MonoBehaviour
+public abstract class Item : MonoBehaviour, IPurchase, IUsable
 {
     /*An item can be something that can heal you, replenish your mana, buff your stats, etc.
      

@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Stats : MonoBehaviour
+[CreateAssetMenu(fileName = "New Stats", menuName = "Stats")]
+public class Stats : ScriptableObject
 {
     /*Mainly for the Player, they are given these kinds of stats:
         Strength
@@ -23,16 +23,4 @@ public abstract class Stats : MonoBehaviour
     //Stat Property can either be damage, health, mana, all player stats, etc.
     //Having it this way will allow us to access the property by name, and retreive it.
     public List<StatProperty> properties;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

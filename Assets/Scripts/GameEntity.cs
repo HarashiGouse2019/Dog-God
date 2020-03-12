@@ -9,6 +9,35 @@ public abstract class GameEntity : MonoBehaviour
      
      You give the name for the game entity, define the entity's stats, skills, weapon of use, hp, level, and mana.*/
 
+    public enum EntityType
+    {
+        PLAYER,
+        BOSS,
+        DEITY
+    }
+
+    public string entityName;
+
+    public EntityType entityType;
+
+    [Header("HP")]
+    public float HPValue;
+
+    [Header("Mana")]
+    public float MPValue;
+
+    [Header("Level")]
+    public float LevelRankValue;
+
+    [Header("Stats")]
+    public Stats stats;
+
+    [Header("Skills / Divine Prowess")]
+    public List<Skill> skills;
+
+    [Header("Weapons")]
+    public List<Weapon> weapons;
+
     // Start is called before the first frame update
     void Start()
     {

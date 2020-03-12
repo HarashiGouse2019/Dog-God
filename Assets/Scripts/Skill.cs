@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Skill : MonoBehaviour
+public abstract class Skill : MonoBehaviour, IPurchase, IRewardable, IUsable
 {
     /*A skill can be of the following types;
         Transformation

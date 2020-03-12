@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Weapon : MonoBehaviour
+public abstract class Weapon : MonoBehaviour, IEquippable, IPurchase
 {
     /*Weapons will include a name, as well as if they are one of the following kinds
         Sword

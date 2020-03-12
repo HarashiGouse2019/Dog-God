@@ -1,18 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class StatProperty : MonoBehaviour
+﻿[System.Serializable]
+public class StatProperty
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    /*StatProperty has a name of that property, as well as a min and max value.
+     If a min is just give, a random number will be generated from the min and min + 10.*/
+    public string propertyName;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public int value;
 }
