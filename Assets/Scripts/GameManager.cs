@@ -20,20 +20,21 @@ public enum Target
 public class GameManager : MonoBehaviour
 {
     private static GameManager Instance;
-
     public static class Command
     {
         public static GameSystem GetSystem(string _systemName) => Instance.GetGameSystem(_systemName);
-       
-
         public static SystemStatus GetSystemStatus(GameSystem system) => Instance.GetSystemStatus(system.systemName);
-
         public static SystemInfo[] GetSystemInfo() => Instance.GetAllSystemInfo();
         public static SystemInfo[] GetSystemInfo(Status _status) => Instance.GetAllSystemInfo(_status);
      }
 
     /*GameManager will have a whole collect of different systems and their statuses.*/
 
+    [Header("Resolution")]
+    public uint resolutionWidth = 1920;
+    public uint resolutionHeight = 1660;
+
+    [Header("Game Systems")]
     public List<SystemInfo> systemInfoList = new List<SystemInfo>();
 
     void Awake()
@@ -48,13 +49,15 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        #endregion
+        #endregion  
     }
 
     // Start is called before the first frame update
     void Start()
     {
         RegisterSystems();
+        Application.targetFrameRate = 60;
+        Screen.SetResolution((int)resolutionWidth, (int)resolutionHeight, FullScreenMode.FullScreenWindow, Application.targetFrameRate);
     }
 
     // Update is called once per frame
