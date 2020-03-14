@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "New Wand", menuName = "Wand")]
 public class Wand : Weapon
 {
     // Start is called before the first frame update

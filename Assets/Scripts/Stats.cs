@@ -1,6 +1,31 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+public enum StatVariable 
+{
+    STRENGTH,
+    VITALITY,
+    DEXTERITY,
+    ENDURANCE,
+    CRITCAL,
+    FAITH,
+    INTELLIGENCE,
+    LUCK,
+    PHYSICAL,
+    SPIRITUAL,
+}
+
+public enum ElementalStatVariable
+{
+    FIRE,
+    WATER,
+    EARTH,
+    WIND,
+    LIGHTNING,
+    POISON
+}
+
+
 [CreateAssetMenu(fileName = "New Stats", menuName = "Stats")]
 public class Stats : ScriptableObject
 {

@@ -33,10 +33,10 @@ public abstract class GameEntity : MonoBehaviour
     public Stats stats;
 
     [Header("Skills / Divine Prowess")]
-    public List<Skill> skills;
+    public SkillSet skills;
 
     [Header("Weapons")]
-    public List<Weapon> weapons;
+    public WeaponSet weapons;
 
     // Start is called before the first frame update
     void Start()

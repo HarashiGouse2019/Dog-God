@@ -1,5 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 
+public class SystemException : Exception
+{
+    public SystemException() { }
+    public SystemException(string message) : base(message) { }
+    public SystemException(string message, Exception inner) : base(message, inner) { }
+}
+
+[System.Serializable]
 public abstract class GameSystem : MonoBehaviour
 {
     public static GameSystem Instance;
@@ -21,27 +31,42 @@ public abstract class GameSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void Run()
+    public virtual void Run()
     {
         GameManager.Command.GetSystemStatus(this).OnStatusChange(Status.RUNNING);
     }
 
-    public void Pause()
+    public virtual void Pause()
     {
         GameManager.Command.GetSystemStatus(this).OnStatusChange(Status.PAUSED);
     }
 
-    public void Stop()
+    public virtual void Stop()
     {
         GameManager.Command.GetSystemStatus(this).OnStatusChange(Status.STOPPED);
+    }
+
+    public virtual void Stop(Exception e)
+    {
+        GameManager.Command.GetSystemStatus(this).OnStatusChange(Status.STOPPED);
+        Debug.LogException(e);
+    }
+
+    protected virtual IEnumerator Main()
+    {
+        while(true)
+        {
+
+            yield return null;
+        }
     }
 }

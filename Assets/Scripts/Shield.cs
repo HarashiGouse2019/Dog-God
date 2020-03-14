@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+[CreateAssetMenu(fileName = "New Shield", menuName = "Shield")]
 public class Shield : Weapon
 {
     // Start is called before the first frame update
