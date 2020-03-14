@@ -17,6 +17,8 @@
 
         Equip Weapons and Items. You have 4 slots on both sides on the screen. The top 2 slots are for weapons, while the bottom 2 are mainly
         for items that you can stash.
+
+
          */
 
     // Start is called before the first frame update
