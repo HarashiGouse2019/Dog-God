@@ -9,16 +9,4 @@ public abstract class Shop : MonoBehaviour
      
          A shop will define what kind of shop it is, the person that runs that shop, as well as how many times you have
          visited that shop.*/
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

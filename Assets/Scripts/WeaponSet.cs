@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cakewalk.IoC;
 
 public class WeaponSet : MonoBehaviour, IObjectSet
 {
@@ -10,17 +11,6 @@ public class WeaponSet : MonoBehaviour, IObjectSet
      weapons as well.*/
 
     public List<Weapon> weapons;
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void PassOn()
     {

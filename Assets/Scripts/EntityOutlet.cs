@@ -22,21 +22,10 @@ public class EntityOutlet : MonoBehaviour
 
     public WeaponSet weapons;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     void AddNewSkillToSkillSet()
     {
-
+        
     }
 
     void AddNewWeaponToWeaponSet()

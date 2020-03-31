@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cakewalk.IoC;
 
 public class SkillSet : MonoBehaviour
 {
@@ -12,18 +13,6 @@ public class SkillSet : MonoBehaviour
      of other things such as deities and weapons. Keep that in mind when programming.*/
 
     public List<Skill> skills;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void PassOn()
     {

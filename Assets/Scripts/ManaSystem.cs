@@ -6,15 +6,4 @@
 
     There will also be a UI portion of the system as well.*/
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

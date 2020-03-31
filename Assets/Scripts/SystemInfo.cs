@@ -1,7 +1,9 @@
-﻿[System.Serializable]
-public struct SystemInfo
+﻿using Cakewalk.IoC;
+
+[System.Serializable]
+public class SystemInfo
 {
     public string systemName;
-    public GameSystem system;
-    public SystemStatus systemStatus;
+    [Dependency] public GameSystem system;
+    [Dependency] public SystemStatus systemStatus;
 }

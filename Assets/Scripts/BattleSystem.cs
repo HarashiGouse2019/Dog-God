@@ -1,4 +1,14 @@
-﻿public class BattleSystem : GameSystem
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+public enum OpenOptions
+{
+    SKILL,
+    ITEM,
+    WEAPONS
+}
+
+public class BattleSystem : GameSystem, IOpenItemList, IOpenSkillList, IOpenWeaponList
 {
     /*The battle system is the transaction between the player, as well as the boss.
      The battle system will include the following functions:
@@ -21,15 +31,85 @@
 
          */
 
-    // Start is called before the first frame update
-    void Start()
+    //Our button options on the main player interface.
+    [Header("Options")]
+    public Button skillButton;
+    public Button itemButton;
+    public Button attackButton;
+    public Button defendButton;
+
+
+    //Our slots on the left and right side of our main player interface
+    [Header("Slots")]
+    public Button slot1;
+    public Button slot2;
+    public Button slot3;
+    public Button slot4;
+
+    //List of entities in battle. In all honestly, it's just the player and the boss
+    public List<GameEntity> entities;
+
+    protected override void Main()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Open an option.
+    /// </summary>
+    /// <param name="option"></param>
+    void Open(OpenOptions option)
     {
-        
+        switch (option)
+        {
+            case OpenOptions.SKILL: OpenSkillList(); break;
+
+            case OpenOptions.ITEM: OpenItemList(); break;
+
+            case OpenOptions.WEAPONS: OpenWeaponList(); break;
+
+            default: break;
+        }
+    }
+
+    /// <summary>
+    /// Opens the Skill List on Command
+    /// </summary>
+    public void OpenSkillList()
+    {
+        Open(OpenOptions.SKILL);
+    }
+
+    /// <summary>
+    /// Opens the Item List on Command
+    /// </summary>
+    public void OpenItemList()
+    {
+        Open(OpenOptions.ITEM);
+    }
+
+    /// <summary>
+    /// Opens the Weapon List on Command
+    /// </summary>
+    public void OpenWeaponList()
+    {
+        Open(OpenOptions.WEAPONS);
+    }
+
+    /// <summary>
+    /// Signify that the player is ready to attack.
+    /// </summary>
+    public void SignalToAttack()
+    {
+
+    }
+
+
+    /// <summary>
+    /// Signify that the player is going to defend.
+    /// </summary>
+    public void SignalToDefend()
+    {
+
     }
 }

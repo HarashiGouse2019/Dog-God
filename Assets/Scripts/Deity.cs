@@ -22,15 +22,4 @@ public abstract class Deity : MonoBehaviour
     //Requirements that the player has to have in order to wield it.
     public Requirement[] requirements;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

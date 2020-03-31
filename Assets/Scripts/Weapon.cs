@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cakewalk.IoC;
 
 public abstract class Weapon : ScriptableObject, IEquippable, IPurchase
 {
@@ -30,20 +31,9 @@ public abstract class Weapon : ScriptableObject, IEquippable, IPurchase
     public string caption;
 
     //Weapon stats (these states will be added to the players)
-    public Stats stats;
+    [Dependency] public Stats stats;
 
     //Requirements that the player has to have in order to wield it.
     public Requirement[] requirements;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

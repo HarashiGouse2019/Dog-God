@@ -12,15 +12,4 @@ public abstract class Skill : MonoBehaviour, IPurchase, IRewardable, IUsable
         
      There can also be skills that are given from a particular Weapon or Deity called their Divine Prowess.*/
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
