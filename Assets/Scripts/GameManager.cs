@@ -20,7 +20,7 @@ public enum Target
     INFO
 }
 
-[CustomPropertyDrawer(typeof(SystemInfo))]
+[CustomPropertyDrawer(typeof(ShowAsSystemIndicator))]
 public class SystemInfoDrawer : PropertyDrawer
 {
     GUIStyle currentStyle;
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
     public uint resolutionWidth = 1920;
     public uint resolutionHeight = 1660;
 
-    [Header("Game Systems"), Dependency]
+    [Header("Game Systems"), Dependency, ShowAsSystemIndicator]
     public List<SystemInfo> systemInfoList = new List<SystemInfo>();
 
     void Awake()
