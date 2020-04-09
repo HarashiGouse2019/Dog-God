@@ -10,20 +10,19 @@ public enum StatVariable
     CRITCAL,
     FAITH,
     INTELLIGENCE,
-    LUCK,
-    PHYSICAL,
-    SPIRITUAL,
+    LUCK
 }
 
 public enum DamageStatVariable
 {
     NONE,
+    PHYSICAL,
     BURNING,
     FREEZING,
     POISON,
     LIGHTNING,
-    LIGHT,
-    DARK,
+    LIGHTSPIRITUAL,
+    DARKSPIRITUAL,
     ONEHAND,
     TWOHAND,
     DUALWIELD
