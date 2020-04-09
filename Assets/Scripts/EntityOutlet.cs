@@ -16,7 +16,7 @@ public class EntityOutlet : MonoBehaviour
 
     public float hp, mp, levelRank;
 
-    public Stats stats;
+    public WeaponStats stats;
 
     public SkillSet skills;
 

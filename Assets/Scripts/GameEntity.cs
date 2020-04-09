@@ -31,7 +31,7 @@ public abstract class GameEntity : MonoBehaviour
     public float LevelRankValue;
 
     [Header("Stats")]
-    public Stats stats;
+    public EntityStats stats;
 
     [Header("Skills / Divine Prowess")]
     public SkillSet skills;

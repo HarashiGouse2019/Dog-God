@@ -9,6 +9,11 @@ public struct Requirement
     public uint statVal;
 }
 
+public struct DamageEffects
+{
+    public WeaponStatProperty damageEffect;
+}
+
 public interface IEquippable
 {
     

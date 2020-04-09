@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class Deity : MonoBehaviour
 {
@@ -17,9 +18,12 @@ public abstract class Deity : MonoBehaviour
     public string caption;
 
     //Weapon stats (these states will be added to the players)
-    public Stats stats;
+    public EntityStats stats;
+    public List<DamageStatVariable> damageProperties;
 
     //Requirements that the player has to have in order to wield it.
     public Requirement[] requirements;
 
+    //And the Deity's Emblem
+    public Image deityEmblem;
 }

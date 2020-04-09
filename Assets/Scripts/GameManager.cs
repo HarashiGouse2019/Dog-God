@@ -65,8 +65,6 @@ public class SystemInfoDrawer : PropertyDrawer
                 break;
         }
 
-        var systemStatusRect = new Rect(position.x + position.width - 68f, position.y, 70f, position.height);
-
         GUI.Box(colorIndicator, "", currentStyle);
         EditorGUI.PropertyField(systemNameRect, property.FindPropertyRelative("systemName"), GUIContent.none);
         EditorGUI.PropertyField(systemObjRect, property.FindPropertyRelative("system"), GUIContent.none);
@@ -97,7 +95,7 @@ public class GameManager : MonoBehaviour
     private static GameManager Instance;
     public static class Command
     {
-        public static GameSystem GetSystem<T>() => Instance.GetGameSystem<T>();
+        public static T GetSystem<T>() where T : GameSystem => Instance.GetGameSystem<T>();
         public static SystemStatus GetSystemStatus(GameSystem system) => Instance.GetSystemStatus(system.systemName);
         public static SystemInfo[] GetSystemInfo() => Instance.GetAllSystemInfo();
         public static SystemInfo[] GetSystemInfo(Status _status) => Instance.GetAllSystemInfo(_status);
@@ -177,12 +175,12 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="_systemName">The name of the system.</param>
     /// <returns>A game system.</returns>
-    private GameSystem GetGameSystem<T>()
+    private T GetGameSystem<T>() where T : GameSystem
     {
         foreach (SystemInfo info in systemInfoList)
         {
             if (info.system.GetType() == typeof(T))
-                return info.system;
+                return (T)Convert.ChangeType(info.system, typeof(T));
         }
 
         Debug.Log(typeof(T) + "isn't an existing system. Why not creating one that derives from 'GameSystem'?");

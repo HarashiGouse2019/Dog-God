@@ -11,7 +11,8 @@ public class BootStrapper : BaseBootStrapper
         _container.Register<SystemInfo>();
         _container.Register<Shop>();
         _container.Register<Deity>();
-        _container.Register<Stats>();
+        _container.Register<WeaponStats>();
+        _container.Register<EntityStats>();
         _container.Register<SystemStatus>();
         _container.Register<Item>();
     }

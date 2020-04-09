@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthSystem : GameSystem
 {
@@ -10,4 +11,33 @@ public class HealthSystem : GameSystem
      
      There will also be a UI portion of the system as well.*/
 
+    public Slider playerHealthSlider;
+    public float playerMaxHealth;
+    public GameEntity playerEntity;
+
+
+    public Slider bossHealthSlider;
+    public float bossMaxHealth;
+    public GameEntity bossEntity;
+
+    protected override void Start()
+    {
+        //We give the max value for the boss, and the player.
+        playerEntity.HPValue = playerMaxHealth;
+        bossEntity.HPValue = bossMaxHealth;
+    }
+
+    protected override void Main()
+    {
+        ManagerHealthMeter();
+    }
+
+    /// <summary>
+    /// Manages both the player's health, and the boss' health
+    /// </summary>
+    void ManagerHealthMeter()
+    {
+        playerHealthSlider.value = playerEntity.HPValue / playerMaxHealth;
+        bossHealthSlider.value = bossEntity.HPValue / bossMaxHealth;
+    }
 }

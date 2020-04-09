@@ -1,7 +1,7 @@
 ﻿[System.Serializable]
 public struct ElementalStatProperty {
 
-    public ElementalStatVariable property;
+    public DamageStatVariable property;
 
     public int value;
 

@@ -15,19 +15,23 @@ public enum StatVariable
     SPIRITUAL,
 }
 
-public enum ElementalStatVariable
+public enum DamageStatVariable
 {
-    FIRE,
-    WATER,
-    EARTH,
-    WIND,
+    NONE,
+    BURNING,
+    FREEZING,
+    POISON,
     LIGHTNING,
-    POISON
+    LIGHT,
+    DARK,
+    ONEHAND,
+    TWOHAND,
+    DUALWIELD
 }
 
 
 [CreateAssetMenu(fileName = "New Stats", menuName = "Stats")]
-public class Stats : ScriptableObject
+public class EntityStats : ScriptableObject
 {
     /*Mainly for the Player, they are given these kinds of stats:
         Strength

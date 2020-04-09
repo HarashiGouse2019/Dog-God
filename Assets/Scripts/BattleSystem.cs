@@ -31,6 +31,8 @@ public class BattleSystem : GameSystem, IOpenItemList, IOpenSkillList, IOpenWeap
 
          */
 
+
+    private static BattleSystem Instance;
     //Our button options on the main player interface.
     [Header("Options")]
     public Button skillButton;
@@ -48,6 +50,20 @@ public class BattleSystem : GameSystem, IOpenItemList, IOpenSkillList, IOpenWeap
 
     //List of entities in battle. In all honestly, it's just the player and the boss
     public List<GameEntity> entities;
+
+    public static float DamageValue { get; private set; }
+
+    void Awake()
+    {
+        if(Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(Instance);
+        } else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     protected override void Main()
     {
@@ -112,5 +128,37 @@ public class BattleSystem : GameSystem, IOpenItemList, IOpenSkillList, IOpenWeap
     public void SignalToDefend()
     {
 
+    }
+
+    /// <summary>
+    /// A simple command from the player to attack the boss.
+    /// </summary>
+    public void Attack()
+    {
+        /*We need to first create the stats for the player. Major thing to do
+         first before continuing this is to create the "Title Screen" where you create
+         a profile, you name it, and you use 100 sp to distribute to your existing 
+         stats. We'll be relying on all the stats. We'll have to see what weapon we're using to 
+         so that we can add that value to our DamageValue. This is going to be a lot, but that's the initial plan.*/
+        SendDamageTo(entities[1]);
+    }
+
+    /// <summary>
+    /// We can tell damage to anything that is damaagable or is
+    /// in the battle field.
+    /// </summary>
+    /// <param name="_entity">The entity to deliver damage to.</param>
+    public void SendDamageTo(GameEntity _entity)
+    {
+        _entity.HPValue -= DamageValue;
+    }
+
+    /// <summary>
+    /// Updates the damage value to be sent to the target.
+    /// </summary>
+    /// <param name="_value">The amount of damage</param>
+    public void UpdateDamageValue(float _value)
+    {
+        DamageValue = _value;
     }
 }
