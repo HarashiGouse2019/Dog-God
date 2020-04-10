@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Reflection;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,13 +24,17 @@ public class HealthSystem : GameSystem
     protected override void Start()
     {
         //We give the max value for the boss, and the player.
-        playerEntity.HPValue = playerMaxHealth;
-        bossEntity.HPValue = bossMaxHealth;
+        if (playerEntity != null && bossEntity != null)
+        {
+            playerEntity.HPValue = playerMaxHealth;
+            bossEntity.HPValue = bossMaxHealth;
+        }
     }
 
     protected override void Main()
     {
-        ManagerHealthMeter();
+        if (playerHealthSlider != null && bossHealthSlider != null)
+            ManagerHealthMeter();
     }
 
     /// <summary>

@@ -116,7 +116,6 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        StartCoroutine(MoonCalender.Begin());
         #region Singleton
         if (Instance == null)
         {
