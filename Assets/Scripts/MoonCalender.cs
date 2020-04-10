@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Numerics;
+using System.IO;
 using System.Collections;
 using UnityEngine;
 
@@ -17,27 +17,49 @@ public static class MoonCalender
     //We need to know the time
     static DateTime time = DateTime.Now;
     static TimeZoneInfo currentZone;
-    static DateTime PreviousFullMoon = new DateTime(2020, 4, 7, 19, 35, 0, DateTimeKind.Utc);
-    static CleasingPosition position = new CleasingPosition(time.Month, time.Day, time.Year, time.Hour, time.Minute, time.Second);
+    static DateTime PreviousFullMoon;
+    static CleasingPosition position = new CleasingPosition(time.Month, time.Day, time.Year, time.Hour, time.Minute, time.Second, TimeZoneInfo.Local);
     static double DaysPassed = 0;
     static double DaysTilNextCleansing = 0;
 
     const uint EVENING = 20;
-    const double CYCLECOMPLETEINDAYS = 29;
+    const double CYCLECOMPLETEINDAYS = 29.5;
     const uint MORNING = 4;
+
+    static string json;
 
     public static IEnumerator Begin()
     {
+        ReadJson();
         while (true)
         {
+
+            //We got the Universal time, which will be very important.
+            //What we need to do is take the Universal time, and convert it to the local time
+            //based on the TimeZone.
+
+            PreviousFullMoon = TimeZoneInfo.ConvertTimeToUtc(PreviousFullMoon);
+
+            Debug.Log(DateTime.UtcNow + ", PreviousFullMoon " + PreviousFullMoon);
+
+            time = DateTime.UtcNow;
+
+            //Let's try getting the local time with the UTC time and the PreviousFullMoon
+
+            DateTime diffTime, diffPrevMoon;
+
+            #region TimeZoneTest
+
             try
             {
-                if(TimeZoneInfo.Local.IsDaylightSavingTime(DateTimeOffset.Now))
+                if (TimeZoneInfo.Local.IsDaylightSavingTime(time))
                     currentZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.DaylightName);
                 else
                     currentZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.StandardName);
 
-                PreviousFullMoon = TimeZoneInfo.ConvertTime(PreviousFullMoon, TimeZoneInfo.Local);
+                diffTime = TimeZoneInfo.ConvertTimeFromUtc(time, currentZone);
+                diffPrevMoon = TimeZoneInfo.ConvertTimeFromUtc(PreviousFullMoon, currentZone);
+                Debug.Log("Time in " + currentZone.DisplayName + " " + diffTime + ", PreviousFullMoon " + diffPrevMoon);
             }
             catch (TimeZoneNotFoundException)
             {
@@ -48,22 +70,64 @@ public static class MoonCalender
                 Debug.LogError("Registry data on the " + currentZone + " zone has been corrupted.");
             }
 
-            Debug.Log(DateTime.Now + ", PreviousFullMoon " + PreviousFullMoon);
-            time = DateTime.Now;
-            position = new CleasingPosition(time.Month, time.Day, time.Year, time.Hour, time.Minute, time.Second);
+            #endregion
+
+            position = new CleasingPosition(time.Month, time.Day, time.Year, time.Hour, time.Minute, time.Second, currentZone);
+
             DaysPassed = (time - PreviousFullMoon).TotalDays;
-            DaysTilNextCleansing = CYCLECOMPLETEINDAYS - DaysPassed;
+
+            DaysTilNextCleansing = Mathf.RoundToInt((float)(CYCLECOMPLETEINDAYS - DaysPassed));
+
             CheckIfNightOfCleansing();
+
             yield return null;
         }
     }
 
     static void CheckIfNightOfCleansing()
     {
-        Debug.Log(Mathf.RoundToInt((float)DaysTilNextCleansing) + " remains until next Cleansing.");
-        if (DaysPassed % CYCLECOMPLETEINDAYS == 0 && (time.Hour >= EVENING || time.Hour <= MORNING))
+        Debug.Log(DaysTilNextCleansing + " remains until next Cleansing.");
+        if (time.Hour >= EVENING || time.Hour <= MORNING)
         {
-            
+
         }
     }
+
+    static void UpdatePreviousFullMoon(bool firstTime = false)
+    {
+        if (!firstTime)
+        {
+            if (DaysPassed % CYCLECOMPLETEINDAYS == 0 && time.Second == 0 && File.Exists(Application.persistentDataPath + "/moonCal.json"))
+            {
+                CleasingPosition newPosition = new CleasingPosition(time.Month, time.Day, time.Year, time.Hour, time.Minute, time.Second, currentZone);
+                json = JsonUtility.ToJson(newPosition);
+                File.WriteAllText(Application.persistentDataPath + "/moonCal.json", json);
+            }
+        }
+        else
+        {
+            if (File.Exists(Application.persistentDataPath + "/moonCal.json"))
+            {
+                CleasingPosition newPosition = new CleasingPosition(PreviousFullMoon.Month, PreviousFullMoon.Day, PreviousFullMoon.Year, PreviousFullMoon.Hour, PreviousFullMoon.Minute, PreviousFullMoon.Second, TimeZoneInfo.Local);
+                json = JsonUtility.ToJson(newPosition);
+                File.WriteAllText(Application.persistentDataPath + "/moonCal.json", json);
+                Debug.Log("Json created....");
+            }
+            else
+            {
+                File.Create(Application.persistentDataPath + "/moonCal.json");
+
+                //Recursive function
+                UpdatePreviousFullMoon(firstTime);
+            }
+        }
+    }
+
+    static void ReadJson()
+    {
+        CleasingPosition lastPosition = JsonUtility.FromJson<CleasingPosition>(GetJSONString());
+        PreviousFullMoon = new DateTime((int)lastPosition.year, (int)lastPosition.month, (int)lastPosition.day, (int)lastPosition.hour, (int)lastPosition.minute, (int)lastPosition.second);
+    }
+
+    public static string GetJSONString() => File.ReadAllText(Application.persistentDataPath + "/moonCal.json");
 }
