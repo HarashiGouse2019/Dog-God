@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections;
 using UnityEngine;
 
@@ -14,13 +15,14 @@ public static class MoonCalender
          */
 
     //We need to know the time
-    static DateTime time = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now);
-    static DateTime PreviousFullMoon = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2020, 4, 7, 19, 35, 0));
+    static DateTime time = DateTime.Now;
+    static TimeZoneInfo currentZone;
+    static DateTime PreviousFullMoon = new DateTime(2020, 4, 7, 19, 35, 0, DateTimeKind.Utc);
     static CleasingPosition position = new CleasingPosition(time.Month, time.Day, time.Year, time.Hour, time.Minute, time.Second);
     static double DaysPassed = 0;
     static double DaysTilNextCleansing = 0;
 
-    const uint EVENING = 18;
+    const uint EVENING = 20;
     const double CYCLECOMPLETEINDAYS = 29;
     const uint MORNING = 4;
 
@@ -28,22 +30,40 @@ public static class MoonCalender
     {
         while (true)
         {
+            try
+            {
+                if(TimeZoneInfo.Local.IsDaylightSavingTime(DateTimeOffset.Now))
+                    currentZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.DaylightName);
+                else
+                    currentZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.StandardName);
 
-            time = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now);
+                PreviousFullMoon = TimeZoneInfo.ConvertTime(PreviousFullMoon, TimeZoneInfo.Local);
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                Debug.LogError("Unable to find the " + currentZone + " zone in the registry.");
+            }
+            catch (InvalidTimeZoneException)
+            {
+                Debug.LogError("Registry data on the " + currentZone + " zone has been corrupted.");
+            }
+
+            Debug.Log(DateTime.Now + ", PreviousFullMoon " + PreviousFullMoon);
+            time = DateTime.Now;
             position = new CleasingPosition(time.Month, time.Day, time.Year, time.Hour, time.Minute, time.Second);
-            DaysPassed = (time.Date - PreviousFullMoon.Date).TotalDays;
+            DaysPassed = (time - PreviousFullMoon).TotalDays;
             DaysTilNextCleansing = CYCLECOMPLETEINDAYS - DaysPassed;
-            CheckIfDayOfCleansing();
+            CheckIfNightOfCleansing();
             yield return null;
         }
     }
 
-    static void CheckIfDayOfCleansing()
+    static void CheckIfNightOfCleansing()
     {
-        Debug.Log(DaysTilNextCleansing + " remains until next Cleansing.");
+        Debug.Log(Mathf.RoundToInt((float)DaysTilNextCleansing) + " remains until next Cleansing.");
         if (DaysPassed % CYCLECOMPLETEINDAYS == 0 && (time.Hour >= EVENING || time.Hour <= MORNING))
         {
-            Debug.Log("Today is the Day of Cleansing!");
+            
         }
     }
 }

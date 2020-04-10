@@ -41,8 +41,13 @@ restrictions, and use it. That includes skills from Weapons and Divine Arts from
 The Deity Shrine doesn't have a person in there, so this one doesn't count.
 
 Then you have Hazel, the person you always meet at Heaven's Plaza every time you die.
-Signing a contract with her means you have a Skill called Divine Unison. When you use this skill (which takes a lot
-of MP. In fact, you need at least 800,000
+Signing a contract with her means you have a Skill called Divine Unison. When you use this skill, it'll take ALL
+of MP. HOWEVER, you need at least 180,000 MP to actually use it. The only possibility of using this is if you've contracted
+with Amber, which doubles all Player stats (meaning if you only reach at least 900, you are able to have 1800 MP, making
+the MP 180,000, which using the move would be your whole MP. Beside her Divine Art being OP, Strength, Faith, Intelligence, and Luck get
+is buffed by half-double.
+
+So that's all the buff and Divine Arts that each deity has (at least those of superior status.
 
 
 ###
@@ -55,4 +60,8 @@ Hina
 Amber
 
 <EXPRESSIONS>
+
+<DIALOGUE_SET_000>
+
+<END>
 
