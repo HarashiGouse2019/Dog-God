@@ -67,8 +67,7 @@ public class BattleSystem : GameSystem, IOpenItemList, IOpenSkillList, IOpenWeap
 
     protected override void Main()
     {
-        List<string> notes = new List<string>();
-        notes[0] = "Try me!";
+
     }
 
     /// <summary>

@@ -40,7 +40,7 @@ public static class MoonCalender
 
             PreviousFullMoon = TimeZoneInfo.ConvertTimeToUtc(PreviousFullMoon);
 
-            Debug.Log(DateTime.UtcNow + ", PreviousFullMoon " + PreviousFullMoon);
+            //Debug.Log(DateTime.UtcNow + ", PreviousFullMoon " + PreviousFullMoon);
 
             time = DateTime.UtcNow;
 
@@ -59,7 +59,7 @@ public static class MoonCalender
 
                 diffTime = TimeZoneInfo.ConvertTimeFromUtc(time, currentZone);
                 diffPrevMoon = TimeZoneInfo.ConvertTimeFromUtc(PreviousFullMoon, currentZone);
-                Debug.Log("Time in " + currentZone.DisplayName + " " + diffTime + ", PreviousFullMoon " + diffPrevMoon);
+                //Debug.Log("Time in " + currentZone.DisplayName + " " + diffTime + ", PreviousFullMoon " + diffPrevMoon);
             }
             catch (TimeZoneNotFoundException)
             {
@@ -86,7 +86,7 @@ public static class MoonCalender
 
     static void CheckIfNightOfCleansing()
     {
-        Debug.Log(DaysTilNextCleansing + " remains until next Cleansing.");
+        //Debug.Log(DaysTilNextCleansing + " remains until next Cleansing.");
         if (time.Hour >= EVENING || time.Hour <= MORNING)
         {
 

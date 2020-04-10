@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEditor;
 
 using Cakewalk.IoC;
@@ -60,7 +62,7 @@ public class SystemInfoDrawer : PropertyDrawer
             case 2:
                 {
                     currentStyle = new GUIStyle(GUI.skin.box);
-                    currentStyle.normal.background = MakeTex(2,2,running);
+                    currentStyle.normal.background = MakeTex(2, 2, running);
                 }
                 break;
         }
@@ -110,6 +112,8 @@ public class GameManager : MonoBehaviour
     [Header("Game Systems"), Dependency, ShowAsSystemIndicator]
     public List<SystemInfo> systemInfoList = new List<SystemInfo>();
 
+    DirectoryInfo dirInfo;
+
     void Awake()
     {
         StartCoroutine(MoonCalender.Begin());
@@ -135,14 +139,17 @@ public class GameManager : MonoBehaviour
 
         Screen.SetResolution((int)resolutionWidth, (int)resolutionHeight, FullScreenMode.FullScreenWindow, Application.targetFrameRate);
 
-        StartUpAllSystems();
+        //I want to also create a folder of Profiles if one exists or not.
 
+        dirInfo = new DirectoryInfo(Application.persistentDataPath + "/Profiles");
+
+        if (!dirInfo.Exists)
+            CreateProfileDirectory();
     }
 
     void RegisterSystems()
     {
-        GameSystem[] allGameSystems = Resources.FindObjectsOfTypeAll(typeof(GameSystem)) as GameSystem[];
-
+        GameSystem[] allGameSystems = FindObjectsOfType<GameSystem>();
         foreach (GameSystem entry in allGameSystems)
         {
             SystemInfo newSystemInfo = new SystemInfo
@@ -169,6 +176,17 @@ public class GameManager : MonoBehaviour
         Command.GetSystem<SPSystem>().Run();
         Command.GetSystem<WeaponSystem>().Run();
         Command.GetSystem<HeavensPlazaSystem>().Run();
+    }
+
+    public void Goto(string _scene)
+    {
+        try
+        {
+            SceneManager.LoadScene(_scene);
+        } catch(IOException e)
+        {
+            Debug.LogWarning(e.Message);
+        }
     }
 
     /// <summary>
@@ -229,5 +247,17 @@ public class GameManager : MonoBehaviour
         SystemInfo[] data = systemInfo.ToArray();
 
         return data;
+    }
+
+    private void CreateProfileDirectory()
+    {
+        try
+        {
+            dirInfo.Create();
+        }
+        catch (IOException e)
+        {
+            Debug.LogError(e.Message);
+        }
     }
 }
