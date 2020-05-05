@@ -63,5 +63,51 @@ Amber
 
 <DIALOGUE_SET_000>
 
+@Shiba_Inugami Hewwo!!!<<
+
+@Shiba_Inugami I am called by many names!!!<<
+
+@Shiba_Inugami ... [HALT::2000]But you can call me [BOLD]Dog God[BOLD::END]<<
+
+@Shiba_Inugami [HALT::1000]Or the [BOLD]Great Shiba Inugami[BOLD::END].<<
+
+@Shiba_Inugami So I dare you... [HALT::1000]to pick a decision!!!<<
+
+<PROMPT 0>
+
+###DIALOGUE###
+
+<DIALOGUE_SET_001>
+@ Seems you wanted to talk to him.<<
+@ Shiba is now happy Shiba.<<
+<JUMP 5>
+
+<DIALOGUE_SET_002>
+@ Shiba seems confused.<<
+@ Shiba is now confused Shiba.<<
+<JUMP 5>
+
+<DIALOGUE_SET_003>
+@ Shiba is now enraged!<<
+@ Shiba is now angry Shiba!<<
+<JUMP 5>
+
+<DIALOGUE_SET_004>
+@ Shiba seems confused.<<
+@ Shiba is now confused Shiba.<<
+<JUMP 5>
+
+<DIALOGUE_SET_005>
+
+<PROMPT 1>
+
+###Prompt Triggers###
+<PROMPT_000 | MAX 4 | TYPE MULTIPLE>
+[1] "Talk to him." >> 001
+[2] "Don't say anything." >> 002
+[3] "Smack him!" >> 003
+[4] "Sing a lullaby." >> 004
 <END>
+
+
 

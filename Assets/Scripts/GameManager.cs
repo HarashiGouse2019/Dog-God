@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
@@ -22,85 +23,120 @@ public enum Target
     INFO
 }
 
-//[CustomPropertyDrawer(typeof(ShowAsSystemIndicator))]
-//public class SystemInfoDrawer : PropertyDrawer
-//{
-//    GUIStyle currentStyle;
-//    Color stopped = new Color(1f, 0f, 0f, 0.5f);
-//    Color paused = new Color(0.5f, 0.5f, 0f, 0.5f);
-//    Color running = new Color(0f, 1f, 0f, 0.5f);
+#if UNITY_EDITOR
+[CustomPropertyDrawer(typeof(ShowAsSystemIndicator))]
+public class SystemInfoDrawer : PropertyDrawer
+{
+    GUIStyle currentStyle;
+    Color stopped = new Color(1f, 0f, 0f, 0.5f);
+    Color paused = new Color(0.5f, 0.5f, 0f, 0.5f);
+    Color running = new Color(0f, 1f, 0f, 0.5f);
 
-//    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-//    {
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    {
 
 
-//        EditorGUI.BeginProperty(position, label, property);
+        EditorGUI.BeginProperty(position, label, property);
 
-//        position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+        position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 
-//        var indent = EditorGUI.indentLevel;
-//        EditorGUI.indentLevel = 0;
+        var indent = EditorGUI.indentLevel;
+        EditorGUI.indentLevel = 0;
 
-//        var colorIndicator = new Rect(position.x, position.y, position.width - 220, position.height);
-//        var systemNameRect = new Rect(position.x + position.width - 215f, position.y, 80f, position.height);
-//        var systemObjRect = new Rect(position.x + position.width - 150f, position.y, 150f, position.height);
+        var colorIndicator = new Rect(position.x, position.y, position.width - 220, position.height);
+        var systemNameRect = new Rect(position.x + position.width - 215f, position.y, 80f, position.height);
+        var systemObjRect = new Rect(position.x + position.width - 150f, position.y, 150f, position.height);
 
-//        switch (property.FindPropertyRelative("systemStatus.systemStatus").enumValueIndex)
-//        {
-//            case 0:
-//                {
-//                    currentStyle = new GUIStyle(GUI.skin.box);
-//                    currentStyle.normal.background = MakeTex(2, 2, stopped);
-//                }
-//                break;
-//            case 1:
-//                {
-//                    currentStyle = new GUIStyle(GUI.skin.box);
-//                    currentStyle.normal.background = MakeTex(2, 2, paused);
-//                }
-//                break;
-//            case 2:
-//                {
-//                    currentStyle = new GUIStyle(GUI.skin.box);
-//                    currentStyle.normal.background = MakeTex(2, 2, running);
-//                }
-//                break;
-//        }
+        switch (property.FindPropertyRelative("systemStatus.systemStatus").enumValueIndex)
+        {
+            case 0:
+                {
+                    currentStyle = new GUIStyle(GUI.skin.box);
+                    currentStyle.normal.background = MakeTex(2, 2, stopped);
+                }
+                break;
+            case 1:
+                {
+                    currentStyle = new GUIStyle(GUI.skin.box);
+                    currentStyle.normal.background = MakeTex(2, 2, paused);
+                }
+                break;
+            case 2:
+                {
+                    currentStyle = new GUIStyle(GUI.skin.box);
+                    currentStyle.normal.background = MakeTex(2, 2, running);
+                }
+                break;
+        }
 
-//        GUI.Box(colorIndicator, "", currentStyle);
-//        EditorGUI.PropertyField(systemNameRect, property.FindPropertyRelative("systemName"), GUIContent.none);
-//        EditorGUI.PropertyField(systemObjRect, property.FindPropertyRelative("system"), GUIContent.none);
+        GUI.Box(colorIndicator, "", currentStyle);
+        EditorGUI.PropertyField(systemNameRect, property.FindPropertyRelative("systemName"), GUIContent.none);
+        EditorGUI.PropertyField(systemObjRect, property.FindPropertyRelative("system"), GUIContent.none);
 
-//        EditorGUI.indentLevel = indent;
+        EditorGUI.indentLevel = indent;
 
-//        EditorGUI.EndProperty();
-//    }
+        EditorGUI.EndProperty();
+    }
 
-//    private Texture2D MakeTex(int width, int height, Color col)
-//    {
-//        Color[] pix = new Color[width * height];
-//        for (int i = 0; i < pix.Length; ++i)
-//        {
-//            pix[i] = col;
-//        }
-//        Texture2D result = new Texture2D(width, height);
-//        result.SetPixels(pix);
-//        result.Apply();
-//        return result;
-//    }
-//}
-
+    private Texture2D MakeTex(int width, int height, Color col)
+    {
+        Color[] pix = new Color[width * height];
+        for (int i = 0; i < pix.Length; ++i)
+        {
+            pix[i] = col;
+        }
+        Texture2D result = new Texture2D(width, height);
+        result.SetPixels(pix);
+        result.Apply();
+        return result;
+    }
+}
+#endif
 
 
 public class GameManager : MonoBehaviour
 {
     private static GameManager Instance;
-    public static class Command
+    public struct Command
     {
         public static T GetSystem<T>() where T : GameSystem => Instance.GetGameSystem<T>();
         public static SystemStatus GetSystemStatus(GameSystem system) => Instance.GetSystemStatus(system.systemName);
         public static SystemInfo[] GetSystemInfo() => Instance.GetAllSystemInfo();
         public static SystemInfo[] GetSystemInfo(Status _status) => Instance.GetAllSystemInfo(_status);
+    }
+    public struct Achievement
+    {
+        string title;
+
+        DateTime achievementReceivedDate;
+
+        public enum Rarity
+        {
+            COMMON,
+            RARE,
+            SUPER_RARE
+        }
+        Rarity rarity;
+
+        bool isAchieved;
+
+        public string GetTitle() => title;
+        public Rarity GetAchievementRarity() => rarity;
+
+        public bool GetAchievementStatus() => isAchieved;
+        public DateTime GetReceivalDate() => achievementReceivedDate;
+        public double GetDaysSinceAchievement() => GetReceivalDate().TimeOfDay.TotalDays;
+    }
+    public enum SortingOrder
+    {
+        TITLE,
+        DATE,
+        DAYS,
+        MONTH,
+        HOURS,
+        MINUTES,
+        SECONDS,
+        RARITY
     }
 
     /*GameManager will have a whole collect of different systems and their statuses.*/
@@ -113,6 +149,9 @@ public class GameManager : MonoBehaviour
     public List<SystemInfo> systemInfoList = new List<SystemInfo>();
 
     DirectoryInfo dirInfo;
+
+    [Header("Achievements"), SerializeField]
+    private List<Achievement> achievements = new List<Achievement>();
 
     void Awake()
     {
@@ -182,7 +221,8 @@ public class GameManager : MonoBehaviour
         try
         {
             SceneManager.LoadScene(_scene);
-        } catch(IOException e)
+        }
+        catch (IOException e)
         {
             Debug.LogWarning(e.Message);
         }
@@ -227,7 +267,9 @@ public class GameManager : MonoBehaviour
     /// <returns>All system statuses</returns>
     private SystemInfo[] GetAllSystemInfo()
     {
-        var systemInfo = from system in systemInfoList select system;
+        var systemInfo = from system
+                         in systemInfoList
+                         select system;
 
         SystemInfo[] data = systemInfo.ToArray();
 
@@ -241,7 +283,10 @@ public class GameManager : MonoBehaviour
     /// <returns>Systems with a specify status.</returns>
     private SystemInfo[] GetAllSystemInfo(Status _status)
     {
-        var systemInfo = from system in systemInfoList where system.systemStatus.Retrieve() == _status select system;
+        var systemInfo = from system
+                         in systemInfoList
+                         where system.systemStatus.Retrieve() == _status
+                         select system;
 
         SystemInfo[] data = systemInfo.ToArray();
 
@@ -257,6 +302,122 @@ public class GameManager : MonoBehaviour
         catch (IOException e)
         {
             Debug.LogError(e.Message);
+        }
+    }
+
+    private Achievement[] GetAllMarkedAchievements()
+    {
+        //Going to filter out the achievements that has only been completed
+        return (from markedAchievement
+                in achievements
+                where markedAchievement.GetAchievementStatus() == true
+                select markedAchievement).ToArray();
+    }
+
+    private Achievement[] GetAchievementsInASpanOf(double _days)
+    {
+        //Depending on how far you want the days to be, you'll get that total amount of achievements
+        return (from markedAchievement
+                in achievements
+                where markedAchievement.GetDaysSinceAchievement() <= _days
+                select markedAchievement).ToArray();
+    }
+
+    private Achievement[] SortAchievementsBy(SortingOrder sortingOrder, bool _descendingOrder = false)
+    {
+        Achievement[] sortedAchievements = null;
+        //Sort by a specified SortingOrder
+        switch (sortingOrder)
+        {
+            #region Sort by Title
+            //Sort Achievemented by Title
+            case SortingOrder.TITLE:
+                sortedAchievements = (from markedAchievement
+                                      in achievements
+                                      orderby markedAchievement.GetTitle()
+                                      select markedAchievement).ToArray();
+
+                //Change sorting if set to true
+                return (_descendingOrder == true ? sortedAchievements.OrderByDescending(newSortedAchievement => sortedAchievements).ToArray() : sortedAchievements);
+
+            #endregion
+
+            #region Sort by Date
+            //Sort Achievemented by Date
+            case SortingOrder.DATE:
+                sortedAchievements = (from markedAchievement
+                                      in achievements
+                                      orderby markedAchievement.GetReceivalDate()
+                                      select markedAchievement).ToArray();
+
+                //Change sorting if set to true
+                return (_descendingOrder == true ? sortedAchievements.OrderByDescending(newSortedAchievement => sortedAchievements).ToArray() : sortedAchievements);
+            #endregion
+
+            #region Sort by Total Days
+            //Sort Achievemented by Days
+            case SortingOrder.DAYS:
+                sortedAchievements = (from markedAchievement
+                                      in achievements
+                                      orderby markedAchievement.GetReceivalDate().TimeOfDay.TotalDays
+                                      select markedAchievement).ToArray();
+
+                //Change sorting if set to true
+                return (_descendingOrder == true ? sortedAchievements.OrderByDescending(newSortedAchievement => sortedAchievements).ToArray() : sortedAchievements);
+            #endregion
+
+            #region Sort by Total Hours
+            //Sort Achievemented by Hours
+            case SortingOrder.HOURS:
+                sortedAchievements = (from markedAchievement
+                                      in achievements
+                                      orderby markedAchievement.GetReceivalDate().TimeOfDay.TotalHours
+                                      select markedAchievement).ToArray();
+
+                //Change sorting if set to true
+                return (_descendingOrder == true ? sortedAchievements.OrderByDescending(newSortedAchievement => sortedAchievements).ToArray() : sortedAchievements);
+            #endregion
+
+            #region Sort by Total Minutes
+            //Sort Achievemented by Minutes
+            case SortingOrder.MINUTES:
+                sortedAchievements = (from markedAchievement
+                                      in achievements
+                                      orderby markedAchievement.GetReceivalDate().TimeOfDay.TotalMinutes
+                                      select markedAchievement).ToArray();
+
+                //Change sorting if set to true
+                return (_descendingOrder == true ? sortedAchievements.OrderByDescending(newSortedAchievement => sortedAchievements).ToArray() : sortedAchievements);
+            #endregion
+
+            #region Sort by Total Seconds
+            //Sort Achievemented by Seconds
+            case SortingOrder.SECONDS:
+                sortedAchievements = (from markedAchievement
+                                      in achievements
+                                      orderby markedAchievement.GetReceivalDate().TimeOfDay.TotalSeconds
+                                      select markedAchievement).ToArray();
+
+                //Change sorting if set to true
+                return (_descendingOrder == true ? sortedAchievements.OrderByDescending(newSortedAchievement => sortedAchievements).ToArray() : sortedAchievements);
+            #endregion
+
+            #region Sort by Rarity
+            //Sort Achievemented by Rarity
+            case SortingOrder.RARITY:
+                sortedAchievements = (from markedAchievement
+                                      in achievements
+                                      orderby markedAchievement.GetAchievementRarity()
+                                      select markedAchievement).ToArray();
+
+                //Change sorting if set to true
+                return (_descendingOrder == true ? sortedAchievements.OrderByDescending(newSortedAchievement => sortedAchievements).ToArray() : sortedAchievements);
+            #endregion
+
+            #region Default
+            default: return null; 
+                #endregion
+
         }
     }
 }

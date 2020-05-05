@@ -33,7 +33,7 @@ public abstract class GameSystem : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        
+ 
     }
 
     protected virtual void Update()
@@ -54,8 +54,6 @@ public abstract class GameSystem : MonoBehaviour
     {
         //This is were our main code is going to go.
     }
-
-
 
     public virtual void Run()
     {
@@ -94,10 +92,12 @@ public abstract class GameSystem : MonoBehaviour
     /// <returns>null value.</returns>
     protected virtual IEnumerator SystemRoutine()
     {
+        //Main Loop
         while(true)
         {
             try
             {
+                //Try calling main every fram
                 Main();
             }
             catch
@@ -108,4 +108,6 @@ public abstract class GameSystem : MonoBehaviour
             yield return null;
         }
     }
+
+    public int Number() => 5;
 }
